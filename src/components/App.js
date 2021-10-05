@@ -2,7 +2,7 @@
 import Login from "./Login";
 import Register from "./Register"
 
-import {BrowserRouter, Route, Switch, Redirect, Link, NavLink} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Link} from 'react-router-dom';
 
 
 function App() {

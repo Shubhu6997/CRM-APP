@@ -31,6 +31,9 @@ class Login extends Component{
             }
             break;
             }
+            default : {
+                console.log("Default case");
+            }
 
         }
         this.setState({[name] : value, errors});

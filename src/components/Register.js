@@ -1,6 +1,6 @@
 import { Component } from "react";
 import axios from "axios";
-import { Redirect } from "react-router";
+
 
 const emailvalidation = RegExp(/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/);
 

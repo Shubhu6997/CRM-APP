@@ -1,40 +1,29 @@
 
-const db = require("../Shared/mongo");
+const db = require("../mongo");
 
 const jwt = require("jsonwebtoken");
 
 const bcrypt = require("bcrypt");
-
-const {registerSchema, loginSchema} = require("../Shared/schema");
 
 const services = {
     async register(req, res){
         try {
             //Request body validation
 
-            let {error, value} = await registerSchema.validate(req.body);
-            console.log(value);
-            console.log(error);
-            if(error){
-                return res.status(400).send({
-                    error : "validation Failed",
-                    message : error.details[0].message
-                })
-            }
-
+            console.log("body",req.body);
             //Check EmailId exists or not
-            const user  = await db.users.findOne({email : value.email});
+            const user  = await db.users.findOne({email : req.body.email});
             console.log(user);
             if(user)
                 return res.status(400).send({error : "User already exists"});
             
             //Generate Salt 
             const salt = await bcrypt.genSalt();
-            value.password = await bcrypt.hash(value.password, salt);
-            console.log(value);
+            req.body.password = await bcrypt.hash(req.body.password, salt);
+            console.log(req.body);
 
             //Insert user
-            await db.users.insertOne(value);
+            await db.users.insertOne(req.body);
 
             res.send({message : "User registered successfully"});        
             
@@ -47,17 +36,9 @@ const services = {
     async login(req, res){
         try {
             //Request body validation
-            let {error, value} = await loginSchema.validate(req.body);
-            console.log(value);
-            console.log(error);
-            if(error){
-                 return res.status(400).send({
-                     error : "validation Failed",
-                     message : error.details[0].message
-                })
-            }
 
             //Check EmailId exists or not
+            console.log("Body",req.body);
             const user  = await db.users.findOne({email : req.body.email});
             console.log(user);
             if(!user)
@@ -73,7 +54,7 @@ const services = {
             //Generate Token
             const authToken = jwt.sign(
                 {userId : user._Id, email : user.email},
-                JWT_SECRET
+                "Guvi@202!" 
             );
 
             console.log(authToken);
